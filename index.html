@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cột và cờ Việt Nam</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background-image: url(https://tse2.mm.bing.net/th/id/OIP.hqB3BlBHIeAlGbkXqS3DcQHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3);
+      background-size: cover;
+    }
+    .center {
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    .container {
+      transition: transform 2s ease-in-out;
+      z-index: 3;
+    }
+    .move-left {
+      transform: translateX(-30vw);
+    }
+
+    .pole {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .flag {
+      width: 240px;
+      height: 160px;
+      background: red;
+      position: relative;
+      margin-left: 20px;
+     animation: raise-flag 4s ease-out forwards,
+             wave 2s infinite ease-in-out 5s;
+      cursor: pointer;
+      z-index: 4;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: yellow;
+      font-size: 96px;
+    }
+    .column {
+      z-index: 10;
+      width: 28px;
+      height: 66.66vh;
+      background: linear-gradient(to right, #444, #bbb, #444);
+      border: 2px solid #222;
+      box-shadow: inset -2px 0 6px rgba(0,0,0,0.5),
+                  inset 2px 0 6px rgba(255,255,255,0.3),
+                  0 0 10px rgba(0,0,0,0.7);
+    }
+
+    @keyframes raise-flag {
+      from { transform: translateY(66.66vh); }
+      to { transform: translateY(160px); }
+    }
+    @keyframes wave {
+      0% { transform: translateY(160px) rotate(0deg); }
+      25% { transform: translateY(160px) rotate(1deg); }
+      50% { transform: translateY(160px) rotate(-1deg); }
+      75% { transform: translateY(160px) rotate(1deg); }
+      100% { transform: translateY(160px) rotate(0deg); }
+    }
+
+    /* Overlay tối */
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0);
+      pointer-events: none;
+      z-index: 1;
+      transition: background 2s ease-in-out;
+    }
+    #overlay.dark {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Video container */
+    #video-container {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 66.66vh;
+      display: none;
+      z-index: 5;
+    }
+    #video-container video {
+      height: 100%;
+      width: auto;
+    }
+
+    /* Karaoke text */
+    #karaoke {
+      position: absolute;
+      right: 0;
+      top: 66.66vh;
+      width: 40vw;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: yellow;
+      display: none;
+      z-index: 2;
+      text-shadow: 2px 2px 6px black, 0 0 10px red;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #karaoke.final-line {
+      position: absolute;
+      right: 0;
+      top: 66.66vh;
+      width: 70vw;
+      text-align: center;
+      font-size: 33px;
+      font-weight: bold;
+      color: yellow;
+      display: none;
+      z-index: 2;
+      text-shadow: 2px 2px 6px black, 0 0 10px red;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .popup {
+      animation: popup 3.5s ease-in-out forwards;
+    }
+    @keyframes popup {
+      0%   { opacity: 0; transform: scale(0.9) translateY(30px); }
+      15%  { opacity: 1; transform: scale(1) translateY(0); }
+      85%  { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.95) translateY(-20px); }
+    }
+
+    /* Ảnh cuối cùng */
+    #final-image {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 5;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    
+    /* ========== RESPONSIVE MOBILE ========== */
+    @media (max-width: 768px) {
+      #karaoke.final-line { font-size: 20px;
+    top:45%; }
+      .flag {
+        width: 160px;
+        height: 100px;
+        margin-left: 10px;
+        transform: translateY(100px);
+      }
+      .star { font-size: 64px; }
+      .column {
+        width: 14px;
+        height: 50vh;
+      }
+      .center { align-items: flex-end; justify-content: center; }
+      #video-container {
+        right: 0; left: 0; top: 0;
+        width: 100%;
+        height: 40vh;
+        display: none;
+      }
+      #video-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      #karaoke {
+        top: 40vh;
+        left: 0; right: 0;
+        width: 100%;
+        font-size: 20px;
+        padding: 5px;
+      }
+      .move-left { transform: translateX(-15vw); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Overlay tối -->
+  <div id="overlay"></div>
+
+  <div class="center" id="main-layout">
+    <div class="container" id="flag-container">
+      <div class="pole">
+        <div class="flag" onclick="handleClick()">
+          <div class="star">★</div>
+        </div>
+        <div class="column"></div>
+      </div>
+    </div>
+    <div id="video-container">
+      <video id="video1" src="https://ik.imagekit.io/mprhlnakz/TikTok%20Downloader-1756715698.mp4?updatedAt=1756716213561"></video>
+    </div>
+    <div id="karaoke"></div>
+  </div>
+
+  <img id="final-image" src="" alt="Việt Nam 2/9">
+
+  <script>
+    const lines = [
+      "Tất cả mọi người đều sinh ra có quyền bình đẳng.",
+      "Tạo hóa cho họ những quyền không ai có thể xâm phạm được;",
+      "trong những quyền ấy, có quyền được sống, quyền tự do và quyền mưu cầu hạnh phúc",
+      "~Chủ Tịch Hồ Chí Minh muôn năm~",
+    ];
+    let lineIndex = 0;
+
+    function showNextLine() {
+      const karaoke = document.getElementById('karaoke');
+      if (lineIndex < lines.length) {
+        karaoke.innerText = lines[lineIndex];
+        karaoke.style.display = 'block';
+        if (lineIndex < lines.length - 1) {
+          karaoke.classList.remove('popup');
+          void karaoke.offsetWidth;
+          karaoke.classList.add('popup');
+          setTimeout(() => {
+            karaoke.style.display = 'none';
+            lineIndex++;
+            showNextLine();
+          }, 3500);
+        } else {
+          karaoke.classList.remove('popup');
+          karaoke.classList.add('final-line');
+          karaoke.style.opacity = "1";
+        }
+      }
+    }
+
+    let flagClicked = false;
+    function handleClick() {
+      if (flagClicked) return;
+      flagClicked = true;
+
+      const container = document.getElementById('flag-container');
+      const videoContainer = document.getElementById('video-container');
+      const video1 = document.getElementById('video1');
+      const mainLayout = document.getElementById('main-layout');
+      const finalImage = document.getElementById('final-image');
+      const overlay = document.getElementById('overlay');
+
+      overlay.classList.add('dark');
+      container.classList.add('move-left');
+
+      setTimeout(() => {
+        video1.style.marginRight= "110" + 'px';
+        videoContainer.style.zIndex = "20";
+        videoContainer.style.display = 'block';
+        video1.style.display = 'block';
+        video1.play();
+        showNextLine();
+      }, 2000);
+
+      video1.addEventListener('ended', () => {
+        mainLayout.style.display = 'none';
+        overlay.style.display = 'none';
+        
+        if (window.innerWidth <= 768) {
+          finalImage.src = "z6966793936195_91d90ef7b4256104da655b73bfee492d.jpg";
+        } else {
+          finalImage.src = "bo-hinh-nen-2-9-ngay-le-quoc-khanh-20-696x435.png";
+        }
+        finalImage.style.display = 'block';
+      });
+    }
+  </script>
+</body>
+</html>
